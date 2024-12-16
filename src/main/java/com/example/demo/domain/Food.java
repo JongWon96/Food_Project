@@ -9,9 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Food")
+@Getter
+@Setter
 public class Food {
 
 	@Id
@@ -34,45 +38,5 @@ public class Food {
 	
 	public Food() {
 		super();
-	}
-
-	public Long getfUid() {
-		return fUid;
-	}
-
-	public void setfUid(Long fUid) {
-		this.fUid = fUid;
-	}
-
-	public String getfName() {
-		return fName;
-	}
-
-	public void setfName(String fName) {
-		this.fName = fName;
-	}
-
-	public FoodDetail getFoodDetail() {
-		return foodDetail;
-	}
-
-	public void setFoodDetail(FoodDetail foodDetail) {
-		this.foodDetail = foodDetail;
-	}
-
-	public String getfImg() {
-		return fImg;
-	}
-
-	public void setfImg(String fImg) {
-		this.fImg = fImg;
-	}
-
-	public String getfCategory() {
-		return fCategory;
-	}
-
-	public void setfCategory(String fCategory) {
-		this.fCategory = fCategory;
 	}
 }
