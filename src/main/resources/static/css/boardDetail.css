@@ -1,0 +1,258 @@
+/* 모달 스타일 */
+.modal {
+    display: none; /* 기본적으로 숨겨짐 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* 헤더 스타일 */
+header {
+    background-color: #4CAF50;  /* 배경색 */
+    color: white;               /* 글자 색상 */
+    padding: 20px;              /* 패딩 */
+    text-align: center;         /* 중앙 정렬 */
+}
+
+header h1 {
+    font-size: 2.5em;           /* 제목 크기 */
+    margin-bottom: 10px;        /* 아래 여백 */
+    font-weight: 600;           /* 글자 두께 */
+}
+
+header a {
+    color: white;               /* 링크 색상 */
+    text-decoration: none;      /* 밑줄 제거 */
+    font-size: 1.2em;           /* 링크 글자 크기 */
+    margin-top: 10px;           /* 상단 여백 */
+    display: inline-block;      /* 인라인 블록으로 배치 */
+    margin-left: 15px;          /* 왼쪽 여백 */
+}
+
+header a:hover {
+    text-decoration: underline; /* 호버 시 밑줄 */
+}
+
+header a:first-child {
+    margin-left: 0;             /* 첫 번째 링크는 왼쪽 여백 제거 */
+}
+
+/* 전체 페이지의 기본 스타일 */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #fafafa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+/* 제목 스타일 */
+h1 {
+    font-size: 2.5em;
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* 작성자와 작성일의 스타일 */
+p {
+    font-size: 1.1em;
+    margin: 10px 0;
+    color: #888;
+}
+
+/* 게시글 내용 스타일 */
+.board-content {
+    width: 90%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 12px;
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.board-content p {
+    font-size: 1em;
+    color: #333;
+}
+
+/* 댓글 영역 스타일 */
+h3 {
+    font-size: 1.8em;
+    margin-top: 40px;
+    color: #333;
+    font-weight: 600;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+    width: 90%;
+    max-width: 800px;
+}
+
+ul li {
+    background-color: #fff;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul li span {
+    font-weight: 500;
+    color: #3c3c3c;
+}
+
+ul li .comment-content {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+/* 댓글 입력 폼 스타일 */
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 1em;
+    box-sizing: border-box;
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #0095f6;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #0095f6; /* Instagram blue */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: 100%;
+    max-width: 150px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #007bb5;
+}
+
+/* 링크 스타일 */
+a {
+    display: inline-block;
+    background-color: transparent;
+    color: #0095f6;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.1em;
+    margin-right: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a:hover {
+    background-color: #f1f1f1;
+    color: #007bb5;
+}
+
+/* 신고 버튼 스타일 */
+form {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+form button {
+    background-color: #f44336; /* Red for danger */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+    max-width: 150px;
+    margin-top: 10px;
+}
+
+form button:hover {
+    background-color: #d32f2f;
+}
+
+/* 반응형 디자인: 작은 화면에서 댓글 입력창 크기 조정 */
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 2em;
+    }
+
+    .board-content {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    textarea {
+        font-size: 0.9em;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
+    a {
+        font-size: 0.9em;
+        padding: 8px 12px;
+    }
+}

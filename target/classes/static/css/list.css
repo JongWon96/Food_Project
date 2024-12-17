@@ -1,0 +1,195 @@
+/* 기본적인 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 바디 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+header a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    margin-top: 10px;
+    display: inline-block;
+}
+
+header a:hover {
+    text-decoration: underline;
+}
+
+/* 검색창 스타일 */
+div {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+form input[type="text"], 
+form select {
+    padding: 10px;
+    font-size: 1em;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #45a049;
+}
+
+/* 게시글 리스트 스타일 */
+table {
+    width: 80%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 0 auto; /* 테이블만 중앙 정렬 */
+}
+
+table th, table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+/* 제목 컬럼 넓이를 더 넓게 설정 */
+
+table th:nth-child(1), table td:nth-child(1){
+	  width: 10%;  
+}
+table th:nth-child(2), table td:nth-child(2) {
+    width: 60%;  
+}
+table th:nth-child(3), table td:nth-child(3){
+	 width: 20%;  
+	}
+
+table th:nth-child(4), table td:nth-child(4){
+	   width: 20%; 
+}
+table th:nth-child(5), table td:nth-child(5) {
+    width: 10%;
+}
+
+table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+table td a {
+    color: #333;
+    text-decoration: none;
+}
+
+table td a:hover {
+    text-decoration: underline;
+}
+
+/* 페이지네이션 스타일 */
+div {
+    text-align: center;
+    margin-top: 30px;
+}
+
+div a {
+    margin: 0 5px;
+    padding: 8px 15px;
+    text-decoration: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    font-size: 1.2em;
+}
+
+div a:hover {
+    background-color: #45a049;
+}
+
+div a:active {
+    background-color: #388E3C;
+}
+
+/* 게시글이 없을 때 */
+th:block {
+    text-align: center;
+    font-size: 1.2em;
+    padding: 20px;
+}
+/* 페이지네이션 컨테이너 */
+.pagination-container {
+    position: relative;  /* 게시글 작성 버튼이 이 영역 내에서 위치하도록 설정 */
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* 게시글 작성 버튼 스타일 */
+.post-button {
+    position: absolute;
+    right: 12%;  /* 페이지네이션 오른쪽 끝에 위치 */
+    background-color: #4CAF50;  /* 버튼 색상 */
+    color: white;  /* 글자 색상 */
+    padding: 8px 16px;  /* 버튼 크기 */
+    font-size: 1.2em;  /* 글자 크기 */
+    border-radius: 5px;  /* 버튼 모서리 둥글게 */
+    text-decoration: none;  /* 링크 기본 스타일 제거 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 버튼 그림자 */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* 애니메이션 효과 */
+}
+
+.post-button:hover {
+    background-color: #45a049;  /* 버튼 색상 변경 (호버 시) */
+    transform: scale(1.05);  /* 버튼 크기 커짐 */
+}
+
+
+
+
+
