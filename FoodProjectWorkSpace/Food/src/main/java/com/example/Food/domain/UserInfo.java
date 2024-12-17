@@ -36,7 +36,7 @@ public class UserInfo {
     private String uname;
 
     @Column(name = "Phone")
-    private int phone;
+    private int uphone;
 
     @Column(name = "U_Gender")
     private int ugender;
@@ -54,7 +54,7 @@ public class UserInfo {
     private int ugoal;
 
     @Column(name = "Style")
-    private int style;
+    private int ustyle;
 
     @Column(name = "U_Allergy")
     private String uallergy;

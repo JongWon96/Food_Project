@@ -15,13 +15,13 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Transactional
     @Override
-    public UserInfo updateUserInfo(int uuid, double uweight, double uheight, String uallergy, int style) {
+    public UserInfo updateUserInfo(int uuid, double uweight, double uheight, String uallergy, int ustyle) {
         UserInfo user = userRepository.findById(uuid)
                 .orElseThrow(() -> new RuntimeException("수정할 사용자를 찾을 수 없습니다."));
         user.setUweight(uweight);
         user.setUheight(uheight);
         user.setUallergy(uallergy);
-        user.setStyle(style);
+        user.setUstyle(ustyle);
 
         return userRepository.save(user);
     }
