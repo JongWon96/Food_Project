@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+	  <meta charset="UTF-8">
+	  <link href="css/shopping.css" rel="stylesheet"> 
+	  <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+	  <script type="text/javascript" th:src="@{js/member.js}"></script>
+  </head>
+  <body>
+  <div id="wrap">
+  	<h1>아이디 찾기</h1>
+  	<br>
+	<form name="findId" id="findId" action="find_id" method="post">
+	<table>
+	<tr>
+		<td align="right"><label> 이름</label></td>
+		<td><input type="text" name="uname" id="uname" value=""></td>
+	</tr>	
+	<tr>
+		<td align="right"><label> 전화번호</label></td>
+		<td><input type="tel" name="uphone" id="uphone" maxlength="13" placeholder="- 없이 숫자만 입력하세요" class="form-control" oninput="autoHyphen(this)"></td>
+	</tr>
+	<tr>
+		<td align="center" colspan="2"><input type="button" value="아이디 찾기" onclick="findMemberId()"></td>
+	</tr>
+	</table>
+	</form>	
+</div>
+</body>
+</html>
