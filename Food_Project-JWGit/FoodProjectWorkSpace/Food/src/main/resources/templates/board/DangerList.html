@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>신고된 게시글 목록</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- 스타일시트 연결 -->
+</head>
+<body>
+    <div class="container">
+        <h1>신고된 게시글 목록</h1>
+
+        <nav>
+            <ul>
+                <!-- 관리자 메뉴 -->
+                <li><a href="/admin/dashboard">사용자 정보</a></li>
+                <li><a href="/admin/boards">게시판 관리</a></li>
+                <li><a href="board/logout">로그아웃</a></li>
+            </ul>
+        </nav>
+        
+        <!-- 게시글 목록 테이블 -->
+        <table border="1" cellspacing="0" cellpadding="10">
+            <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>신고 상태</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 신고된 게시글 목록 출력 -->
+                <tr th:each="board : ${dangerBoards}">
+                    <td th:text="${board.buid}"></td> <!-- 게시글 ID -->
+                    <td>
+                       <a th:href="@{/board_detail/{buid}(buid=${board.buid})}" th:text="${board.btitle}"></a>
+                    </td>
+                    <td>
+                        <a th:text="${board.author != null ? board.author.Uname : '알 수 없음'}"></a>
+                    </td>
+                    <td>'신고됨'</td> <!-- 신고 상태 (항상 '신고됨') -->
+                    <td>
+                          <a th:href="@{/admin/board/approve/{buid}(buid=${board.buid})}">승인</a> | 
+	                      <a th:href="@{/admin/board/remove/{buid}(buid=${board.buid})}">삭제</a>
+                    </td>
+                </tr>
+            </tbody>	
+        </table>
+
+        <!-- 신고된 게시물이 없을 때 메시지 출력 -->
+        <div th:if="${#lists.isEmpty(dangerBoards)}" style="margin-top: 20px;">
+            <p>신고된 게시물이 없습니다.</p>
+        </div>
+
+        <!-- 게시판으로 가기 버튼 -->
+        <div style="margin-top: 20px;">
+            <a href="/boards" style="padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">게시판으로 가기</a>
+        </div>
+
+    </div>
+</body>
+</html>

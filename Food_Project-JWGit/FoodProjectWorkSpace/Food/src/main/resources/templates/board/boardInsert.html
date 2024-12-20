@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 작성</title>
+       <link rel="stylesheet" href="/css/boardInsert_Edit.css"> <!-- 이 부분을 추가합니다. -->
+</head>
+<body>
+    <h1>게시글 작성</h1>
+
+    <form action="/createBoard" method="post" enctype="multipart/form-data" >
+        <label for="btitle">제목</label>
+        <input type="text" id="btitle" name="btitle" required><br>
+
+        <label for="bcontent">내용</label>
+        <textarea id="bcontent" name="bcontent" required></textarea><br>
+
+        <label for="bimg">이미지</label>
+        <input type="file" id="bimg" name="bimg"><br>
+
+        <button type="submit">작성 완료</button>
+    </form>
+
+    <br>
+    <a href="/boards">목록으로</a>
+</body>
+</html>
