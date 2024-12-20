@@ -1,5 +1,8 @@
 package com.example.demo.dto;
 
+import lombok.ToString;
+
+@ToString
 public class UserBmrDto {
     private String name;
     private Integer age;
@@ -41,4 +44,6 @@ public class UserBmrDto {
     public Double getBmr() {
         return bmr;
     }
+    
+    
 }

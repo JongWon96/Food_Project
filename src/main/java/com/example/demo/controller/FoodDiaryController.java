@@ -1,73 +1,71 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.demo.domain.Food;
-import com.example.demo.domain.FoodDiary;
-import com.example.demo.domain.UserInfo;
+import com.example.demo.dto.FoodCalendarDTO;
+import com.example.demo.dto.FoodKcalDTO;
 import com.example.demo.service.FoodDiaryService;
-import com.example.demo.service.UserService;
+import com.example.demo.service.FoodService;
 
 @Controller
+@RequestMapping("/food-diary")
 public class FoodDiaryController {
 
-    @Autowired
-    private FoodDiaryService foodDiaryService;
+    private final FoodService foodService;
+    private final FoodDiaryService foodDiaryService;
 
     @Autowired
-    private UserService userService;
+    public FoodDiaryController(FoodService foodService, FoodDiaryService foodDiaryService) {
+        this.foodService = foodService;
+        this.foodDiaryService = foodDiaryService;
+    }
 
-    /**
-     * FoodDiary.html 로 이동
-     * @param userId 사용자 ID
-     * @param model  모델 객체
-     * @return FoodDiary.html 페이지
-     */
-    @GetMapping("/food-diary")
-    public String getFoodDiaryPage(@RequestParam("userId") Long userId, Model model) {
-        // 사용자 정보 가져오기
-        UserInfo user = userService.getUserById(userId);
-        model.addAttribute("user", user);
-
-        // 사용자 다이어리 데이터 가져오기
-        List<FoodDiary> foodDiaryList = foodDiaryService.getDiaryByUser(userId);
+    // FoodDiary 페이지 로드
+    @GetMapping
+    public String loadFoodDiaryPage(@RequestParam(value = "date", required = false)
+                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                    Model model) {
+        if (date == null) {
+            date = LocalDate.now(); // 날짜가 없으면 오늘 날짜로 설정
+        }
+        List<FoodCalendarDTO> foodDiaryList = foodDiaryService.getFoodDiaryByDate(date);
         model.addAttribute("foodDiaryList", foodDiaryList);
-
-        return "FoodDiary"; // templates/FoodDiary.html
+        model.addAttribute("selectedDate", date); // 이 값을 HTML에서 사용
+        return "FoodDiary";
     }
 
-    /**
-     * 음식 추가 처리
-     * @param userId 사용자 ID
-     * @param foodId 음식 ID
-     * @param mealType 식사 유형 (아침, 점심, 저녁 등)
-     * @return 리다이렉트 FoodDiary 페이지
-     */
-    @PostMapping("/food-diary/add-food")
-    public String addFoodToDiary(@RequestParam("userId") Long userId,
-                                 @RequestParam("foodId") Long foodId,
-                                 @RequestParam("mealType") String mealType) {
-        foodDiaryService.addFoodToDiary(userId, foodId, mealType);
-        return "redirect:/food-diary?userId=" + userId;
+
+    // 음식 검색
+    @GetMapping("/search")
+    @ResponseBody
+    public FoodKcalDTO searchFoodByName(@RequestParam("name") String name) {
+        return foodService.getFoodKcalByName(name);
     }
 
-    /**
-     * 음식 검색 API
-     * @param query 검색어
-     * @param model 모델 객체
-     * @return 검색 결과 페이지 조각 (AJAX 처리 가능)
-     */
-    @GetMapping("/food-diary/search")
-    public String searchFood(@RequestParam("query") String query, Model model) {
-        List<Food> searchResults = foodDiaryService.searchFoods(query);
-        model.addAttribute("searchResults", searchResults);
-        return "foodSearchResults"; // 반환될 템플릿 조각
+    // FoodDiary 추가
+    @PostMapping("/add")
+    public String addFoodDiary(@ModelAttribute FoodCalendarDTO foodCalendarDTO) {
+        foodDiaryService.addFoodDiary(foodCalendarDTO);
+        return "redirect:/food-diary?date=" + foodCalendarDTO.getDate();
+    }
+
+    // FoodDiary 삭제
+    @PostMapping("/delete/{id}")
+    public String deleteFoodDiary(@PathVariable Integer id, @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        foodDiaryService.deleteFoodDiary(id);
+        return "redirect:/food-diary?date=" + date;
     }
 }

@@ -1,5 +1,8 @@
 package com.example.demo.domain;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,15 +11,31 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 @Entity
 @Table(name = "Food_Detail")
+@Getter
+@Setter
+@ToString(exclude = "food")
 public class FoodDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FD_UID")
-    private Long fdUid;
+    private int fduid;
 
     @Column(name = "FD_kcal")
     private int kcal;
@@ -39,74 +58,4 @@ public class FoodDetail {
 	@OneToOne
 	@JoinColumn(name = "F_UID")
 	private Food food;
-
-	public FoodDetail() {
-		super();
-	}
-
-	public Long getFdUid() {
-		return fdUid;
-	}
-
-	public void setFdUid(Long fdUid) {
-		this.fdUid = fdUid;
-	}
-
-	public int getKcal() {
-		return kcal;
-	}
-
-	public void setKcal(int kcal) {
-		this.kcal = kcal;
-	}
-
-	public int getCarb() {
-		return carb;
-	}
-
-	public void setCarb(int carb) {
-		this.carb = carb;
-	}
-
-	public int getPrt() {
-		return prt;
-	}
-
-	public void setPrt(int prt) {
-		this.prt = prt;
-	}
-
-	public int getFat() {
-		return fat;
-	}
-
-	public void setFat(int fat) {
-		this.fat = fat;
-	}
-
-	public int getSugar() {
-		return sugar;
-	}
-
-	public void setSugar(int sugar) {
-		this.sugar = sugar;
-	}
-
-	public String getAllergy() {
-		return allergy;
-	}
-
-	public void setAllergy(String allergy) {
-		this.allergy = allergy;
-	}
-
-	public Food getFood() {
-		return food;
-	}
-
-	public void setFood(Food food) {
-		this.food = food;
-	}
-	
-	
 }
