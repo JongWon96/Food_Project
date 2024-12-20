@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AsherKim1님의 요리일기</title>
+<title>Food Diary</title>
 <link rel="stylesheet" href="styles.css">
 <script src="scripts.js" defer></script>
 </head>
@@ -12,53 +12,85 @@
 	<main>
 		<section class="food-diary">
 			<h1>마이 푸드 다이어리</h1>
-			<p>
-				일요일 <span id="diary-date" th:text="${selectedDate}"></span>
-			</p>
-			<div class="meal-section">
-				<h2>아침 식사</h2>
-				<form action="/food-diary/add" method="post">
-					<input type="hidden" name="date" value="${date}"> <input
-						type="hidden" name="dmeal" value="1"> <label for="foodId">음식
-						ID:</label> <input type="number" id="foodId" name="foodId" required>
-					<label for="userId">사용자 ID:</label> <input type="number"
-						id="userId" name="userId" value="1" required>
-					<button type="submit">항목 추가하기</button>
-				</form>
-			</div>
-			<div class="meal-section">
-				<h2>점심 식사</h2>
-				<form action="/food-diary/add" method="post">
-					<input type="hidden" name="date" value="${date}"> <input
-						type="hidden" name="dmeal" value="2"> <label for="foodId">음식
-						ID:</label> <input type="number" id="foodId" name="foodId" required>
-					<label for="userId">사용자 ID:</label> <input type="number"
-						id="userId" name="userId" value="1" required>
-					<button type="submit">항목 추가하기</button>
-				</form>
-			</div>
-			<div class="meal-section">
-				<h2>저녁 식사</h2>
-				<form action="/food-diary/add" method="post">
-					<input type="hidden" name="date" value="${date}"> <input
-						type="hidden" name="dmeal" value="3"> <label for="foodId">음식
-						ID:</label> <input type="number" id="foodId" name="foodId" required>
-					<label for="userId">사용자 ID:</label> <input type="number"
-						id="userId" name="userId" value="1" required>
-					<button type="submit">항목 추가하기</button>
-				</form>
-			</div>
-			<div class="meal-section">
-				<h2>간식/기타</h2>
-				<form action="/food-diary/add" method="post">
-					<input type="hidden" name="date" value="${date}"> <input
-						type="hidden" name="dmeal" value="4"> <label for="foodId">음식
-						ID:</label> <input type="number" id="foodId" name="foodId" required>
-					<label for="userId">사용자 ID:</label> <input type="number"
-						id="userId" name="userId" value="1" required>
-					<button type="submit">항목 추가하기</button>
-				</form>
-			</div>
+<p>
+    <span id="day-name" th:text="${dayName}"></span>
+    <span id="diary-date" th:text="${selectedDate}"></span>
+</p>
+<div class="meal-section">
+    <h2>아침 식사</h2>
+    <form action="/food-diary/add" method="post">
+        <input type="hidden" name="date" th:value="${selectedDate}">
+        <input type="hidden" name="dmeal" value="1">
+
+        <!-- 음식 검색 -->
+        <label for="foodName">음식 이름:</label>
+        <input type="text" id="foodName" placeholder="음식 이름 입력">
+        <button type="button" onclick="searchFood()">검색</button>
+
+        <label for="foodId">음식 ID:</label>
+        <input type="number" id="foodId" name="foodId" required readonly>
+
+        <label for="userId">사용자 ID:</label>
+        <input type="number" id="userId" name="userId" value="1" required>
+        <button type="submit">항목 추가하기</button>
+    </form>
+</div>
+<div class="meal-section">
+    <h2>점심 식사</h2>
+    <form action="/food-diary/add" method="post">
+        <input type="hidden" name="date" th:value="${selectedDate}">
+        <input type="hidden" name="dmeal" value="1">
+
+        <!-- 음식 검색 -->
+        <label for="foodName">음식 이름:</label>
+        <input type="text" id="foodName" placeholder="음식 이름 입력">
+        <button type="button" onclick="searchFood()">검색</button>
+
+        <label for="foodId">음식 ID:</label>
+        <input type="number" id="foodId" name="foodId" required readonly>
+
+        <label for="userId">사용자 ID:</label>
+        <input type="number" id="userId" name="userId" value="1" required>
+        <button type="submit">항목 추가하기</button>
+    </form>
+</div><div class="meal-section">
+    <h2>저녁 식사</h2>
+    <form action="/food-diary/add" method="post">
+        <input type="hidden" name="date" th:value="${selectedDate}">
+        <input type="hidden" name="dmeal" value="1">
+
+        <!-- 음식 검색 -->
+        <label for="foodName">음식 이름:</label>
+        <input type="text" id="foodName" placeholder="음식 이름 입력">
+        <button type="button" onclick="searchFood()">검색</button>
+
+        <label for="foodId">음식 ID:</label>
+        <input type="number" id="foodId" name="foodId" required readonly>
+
+        <label for="userId">사용자 ID:</label>
+        <input type="number" id="userId" name="userId" value="1" required>
+        <button type="submit">항목 추가하기</button>
+    </form>
+</div>
+<div class="meal-section">
+    <h2>간식/기타</h2>
+    <form action="/food-diary/add" method="post">
+        <input type="hidden" name="date" th:value="${selectedDate}">
+        <input type="hidden" name="dmeal" value="1">
+
+        <!-- 음식 검색 -->
+        <label for="foodName">음식 이름:</label>
+        <input type="text" id="foodName" placeholder="음식 이름 입력">
+        <button type="button" onclick="searchFood()">검색</button>
+
+        <label for="foodId">음식 ID:</label>
+        <input type="number" id="foodId" name="foodId" required readonly>
+
+        <label for="userId">사용자 ID:</label>
+        <input type="number" id="userId" name="userId" value="1" required>
+        <button type="submit">항목 추가하기</button>
+    </form>
+</div>
 		</section>
 		<section class="daily-overview">
 			<h2>일일 개요</h2>

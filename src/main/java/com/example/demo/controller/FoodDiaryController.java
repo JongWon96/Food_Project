@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +22,11 @@ import com.example.demo.dto.FoodCalendarDTO;
 import com.example.demo.dto.FoodKcalDTO;
 import com.example.demo.service.FoodDiaryService;
 import com.example.demo.service.FoodService;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/food-diary")
@@ -42,11 +50,16 @@ public class FoodDiaryController {
             date = LocalDate.now(); // 날짜가 없으면 오늘 날짜로 설정
         }
         List<FoodCalendarDTO> foodDiaryList = foodDiaryService.getFoodDiaryByDate(date);
+
+        // 요일 계산
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        String dayName = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN); // 한글 요일
+
         model.addAttribute("foodDiaryList", foodDiaryList);
-        model.addAttribute("selectedDate", date); // 이 값을 HTML에서 사용
+        model.addAttribute("selectedDate", date); // 선택된 날짜
+        model.addAttribute("dayName", dayName);   // 요일 이름
         return "FoodDiary";
     }
-
 
     // 음식 검색
     @GetMapping("/search")
@@ -67,5 +80,11 @@ public class FoodDiaryController {
     public String deleteFoodDiary(@PathVariable Integer id, @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         foodDiaryService.deleteFoodDiary(id);
         return "redirect:/food-diary?date=" + date;
+    }
+    
+    @GetMapping("/search/food-id")
+    @ResponseBody
+    public Integer searchFoodIdByName(@RequestParam("name") String name) {
+        return foodService.getFoodByName(name).getFuid(); // Food 엔티티에서 ID 반환
     }
 }
