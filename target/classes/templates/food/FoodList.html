@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -11,7 +11,8 @@
         <!-- Bootstrap icons-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/FoodListStyles.css" rel="stylesheet" type="text/css"/>
+        <link th:href="@{/css/FoodListStyles.css}" rel="stylesheet"/>
+        <script type="text/javascript" src="@{/js/FoodListScripts.js}"></script>
     </head>
     <body>
         <!-- Navigation-->
@@ -22,6 +23,20 @@
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder">음식 정보 모음</h1>
                     <p class="lead fw-normal text-white-50 mb-0">각종 음식 정보를 확인하세요</p>
+                    <form method="get">  
+
+						        	<select name="category" align="center">
+						        		<option value="">카테고리 선택</option>
+						            	<option value="저지방">저지방</option>
+						            	<option value="저염식">저염식</option>
+						            	<option value="저칼로리">저칼로리</option>
+						            	<option value="저당음식">저당음식</option>
+						            </select>
+						            
+						            <input type="text" name="searchWord" placeholder="이름으로 검색"/>
+						            <input type="submit" value="검색하기" />
+						    
+				    </form>
                 </div>
             </div>
         </header>
@@ -33,14 +48,14 @@
 	                    <div class="col mb-5">
 	                        <div class="card h-100">
 	                            <!-- Sale badge-->
-	                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+	                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Temporal</div>
 	                            <!-- Product image-->
-	                            <img class="card-img-top" src="@{/food_images/} + ${fInfo.fImg}" alt="..." />
+	                            <img class="card-img-top" src="@{/food_images/} + ${fInfo.fimg}" alt="..." />
 	                            <!-- Product details-->
 	                            <div class="card-body p-4">
 	                                <div class="text-center">
 	                                    <!-- Product name-->
-	                                    <h5 class="fw-bolder">[[food.fName]]</h5>
+	                                    <h5 class="fw-bolder" th:text="${food.fname}"></h5>
 	                                    <!-- Product reviews-->
 	                                    <!-- <div class="d-flex justify-content-center small text-warning mb-2">
 	                                        <div class="bi-star-fill"></div>
@@ -56,7 +71,7 @@
 	                            </div>
 	                            <!-- Product actions-->
 	                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-	                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{fooddetail(fUid=${food.fUid})}">상세정보</a></div>
+	                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{fooddetail(fuid=${food.fuid})}">상세정보</a></div>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -64,12 +79,14 @@
                 </div>
             </div>
         </section>
-        <th:block th:insert="~{/include/page_area}"></th:block>
+        <div style="text-align: center;">
+		    <th:block th:insert="~{/include/page_area}"></th:block>
+		</div>
+
         <!-- Footer-->
         <th:block th:insert="~{/include/footer}"></th:block>  
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/FoodListScripts.js"></script>
+
     </body>
 </html>

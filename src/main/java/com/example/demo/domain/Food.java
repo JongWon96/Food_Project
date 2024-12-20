@@ -22,13 +22,13 @@ import lombok.NoArgsConstructor;
 public class Food {
 	
 	@Id
-	private int fUid;
+	private int fuid;
 	
-	private String fImg;
-	private String fName;
-	private String fCategory;
+	private String fimg;
+	private String fname;
+	private String fcategory;
 
 	@ManyToOne
-	@JoinColumn(name="rfName", nullable=false)
+	@JoinColumn(name="frUid", nullable=false)
 	private FoodRecipe foodRecipe;
 }

@@ -18,8 +18,7 @@ public interface FoodService {
 	
 	public Food getFood(int fUid);
 
-	public FoodDetail getFoodDetail(int fUid);
-	
-	public FoodRecipe getFoodRecipe(String frName);
+	public Page<Food> getFoodListBySearch(String category, String SearchWord, int page, int size);
 
+	public List<Object[]> getFoodAndDetail(int fuid);
 }

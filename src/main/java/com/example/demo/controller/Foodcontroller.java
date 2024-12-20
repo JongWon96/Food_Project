@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.domain.Food;
 import com.example.demo.domain.FoodDetail;
 import com.example.demo.domain.FoodRecipe;
+import com.example.demo.service.FoodDetailService;
+import com.example.demo.service.FoodRecipeService;
 import com.example.demo.service.FoodService;
 
 @Controller
@@ -23,31 +25,29 @@ public class Foodcontroller {
 
 	@Autowired
 	private FoodService foodService;
+	@Autowired
+	private FoodRecipeService foodRecipeService;
+	@Autowired 
+	private FoodDetailService foodDetailService;
 	
 	// 이름으로 검색한 음식 리스트
 	@GetMapping("/foodlist")
-	private String FoodListViewByName(Food food, 
-			@RequestParam(value="name", defaultValue="") String name,
-			@RequestParam(value="page", defaultValue="1") int page,
-			@RequestParam(value="size", defaultValue="10") int size,
-			Model model) {
-		
-		Page<Food> foodlist = foodService.getAllFoodList(name, page, size);
-		
-		model.addAttribute("foodList", foodlist.getContent());
-		model.addAttribute("pageInfo", foodlist);
-		return "food/FoodList";
-	}
-	
-	// 이름으로 검색한 음식 리스트
-	@GetMapping("/foodlist")
-	private String FoodListViewByCategory(Food food, 
+	private String foodListViewByName(Food food, 	
 			@RequestParam(value="category", defaultValue="") String category,
+			@RequestParam(value="searchword", defaultValue="") String searchword,
 			@RequestParam(value="page", defaultValue="1") int page,
 			@RequestParam(value="size", defaultValue="10") int size,
 			Model model) {
+		//Page<Food> foodlist = new PageImpl<>(new ArrayList<>()); // -> 빈 리스트로 초기화 (기본값)
+		Page<Food> foodlist = foodService.getAllFoodList(searchword, page, size);
 		
-		Page<Food> foodlist = foodService.getAllFoodListByCategory(category, page, size);
+		if (!category.isEmpty() && searchword.isEmpty()) {
+			foodlist = foodService.getAllFoodListByCategory(searchword, page, size);
+		} else if (category.isEmpty() && !searchword.isEmpty()) {
+			foodlist = foodService.getAllFoodList(searchword, page, size);
+		} else if (!category.isEmpty() && !searchword.isEmpty()){
+			foodlist = foodService.getFoodListBySearch(category, searchword, page, size);
+		}
 		
 		model.addAttribute("foodList", foodlist.getContent());
 		model.addAttribute("pageInfo", foodlist);
@@ -55,7 +55,7 @@ public class Foodcontroller {
 	}
 	
 	@GetMapping("/foodcategory")
-	private String FoodViewByCategory(@RequestParam("category") String category, Model model) {
+	private String foodViewByCategory(@RequestParam("category") String category, Model model) {
 		
 		List<Food> food = foodService.getFoodListByCategory(category);
 		
@@ -80,7 +80,7 @@ public class Foodcontroller {
 		
 		model.addAttribute("foodsByCategory", tmpFood);
 		
-		String comment = "";
+		String introduce = "";
 		String feature1 = "";
 		String feature2 = "";
 		String feature3 = "";
@@ -93,7 +93,7 @@ public class Foodcontroller {
 		
 		switch (category) {
 		case "저지방" :
-			comment = "저지방 식단에 대한 소개";
+			introduce = "저지방 식단에 대한 소개";
 			feature1 = "체중 관리";
 			feature2 = "심장병 위험 감소";
 			feature3 = "소화 개선";
@@ -105,7 +105,7 @@ public class Foodcontroller {
 			imgsrc = "image/FoodCategory/저지방.jpg";
 			break;
 		case "저염식" :
-			comment = "저염식 식단에 대한 소개";
+			introduce = "저염식 식단에 대한 소개";
 			feature1 = "단기간의 체중 관리";
 			feature2 = "성인병 예방";
 			feature3 = "골다공증 예방";
@@ -117,7 +117,7 @@ public class Foodcontroller {
 			imgsrc = "image/FoodCategory/저염식.png";
 			break;
 		case "저칼로리" :
-			comment = "저칼로리 식단에 대한 소개";
+			introduce = "저칼로리 식단에 대한 소개";
 			feature1 = "체중 감량";
 			feature2 = "혈당 관리";
 			feature3 = "염증 감소";
@@ -129,7 +129,7 @@ public class Foodcontroller {
 			imgsrc = "image/FoodCategory/저칼로리.jpg";
 			break;
 		case "저당식품" :
-			comment = "저당식품 식단에 대한 소개";
+			introduce = "저당식품 식단에 대한 소개";
 			feature1 = "체중 관리";
 			feature2 = "혈당 관리";
 			feature3 = "충치 예방";
@@ -153,9 +153,9 @@ public class Foodcontroller {
 		comments.add(comment3);
 		comments.add(comment4);
 		
-		model.addAttribute("foodVO", food);
+		model.addAttribute("foodVO", tmpFood);
 		model.addAttribute("category", category);
-		model.addAttribute("introduce", comment);
+		model.addAttribute("introduce", introduce);
 		model.addAttribute("features", features);
 		model.addAttribute("comments", comments);
 		model.addAttribute("imgsrc", imgsrc);
@@ -164,33 +164,44 @@ public class Foodcontroller {
 	}
 	
 	@GetMapping("/fooddetail")
-	private String FoodDetailView(Food food, Model model) {
-
-		FoodDetail fdInfo = foodService.getFoodDetail(food.getFUid());
-		Food fInfo = foodService.getFood(food.getFUid());
+	private String foodDetailView(@RequestParam("fuid") int fuid, Model model) {
+		System.out.println("fuid" + fuid);
+		FoodDetail fdInfo = foodDetailService.getFoodDetail(fuid);
 		
-		model.addAttribute("fInfo", fInfo);
-		model.addAttribute("fdInfo", fdInfo);
-
-		String[] category = new String[4];
-		if (fInfo.getFCategory() != null) {
-			String fullCategory = fInfo.getFCategory();
-			for(int i=0 ; i<4; i++) {
-				String kind = fullCategory.split(", ")[i];
-				category[i] = kind;
-			}
-		} else {
-			category = null;
+		System.out.println("fdInfo" + fdInfo);
+		if (fdInfo == null) {
+			model.addAttribute("errorMessage", "FoodDetail not found.");
+			return "errorPage"; // 에러 페이지로 이동
 		}
+//		
+		String fdcategory = fdInfo.getFood().getFcategory();
+		
+		String[] category = new String[4];
+		if (fdcategory != null) {
+		    String[] tempCategories = fdcategory.split(", ");
+		    int length = Math.min(tempCategories.length, 4);
+		    for (int i = 0; i < length; i++) {
+		    	category[i] = tempCategories[i];
+		    }
+		} else {
+		    category = new String[0]; // 빈 배열로 설정
+		}
+		
 		model.addAttribute("categories", category);
+		
+		model.addAttribute("fdInfo", fdInfo);
+		model.addAttribute("fname", fdInfo.getFood().getFname());
+		model.addAttribute("fImg", fdInfo.getFood().getFimg());
+		model.addAttribute("frUid", fdInfo.getFood().getFoodRecipe().getFrUid());
 		
 		return "food/FoodDetail";
 	}
 	
+	
 	@GetMapping("/foodrecipe")
-	private String FoodRecipeView(@RequestParam("rfName") String rfName , Model model) {
+	private String foodRecipeView(@RequestParam("frUid") int frUid , Model model) {
 		
-		FoodRecipe foodrecipe= foodService.getFoodRecipe(rfName);
+		FoodRecipe foodrecipe= foodRecipeService.getFoodRecipeById(frUid);
 		
 		model.addAttribute("foodRecipe", foodrecipe);
 		

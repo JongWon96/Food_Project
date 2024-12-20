@@ -20,27 +20,25 @@ public class FoodServiceImpl implements FoodService{
 
 	@Autowired
 	private FoodRepository foodRepo;
-	@Autowired 
-	private FoodRecipeRepository foodRecipeRepo;
 	
 	public Page<Food> getAllFoodListByCategory(String category, int page, int size){
-		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fCategory");
+		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fcategory");
 		
-		return foodRepo.findAllFoodsByfCategoryContaining(category, paging);
+		return foodRepo.findAllFoodsByfcategoryContaining(category, paging);
 	}
 
 	@Override
 	public Page<Food> getAllFoodList(String FName, int page, int size) {
-		// page 번호는 0부터 시작함. 제품명(name)순으로 정렬
-		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fName");
+		// page 번호는 0부터 시작함. 이름(fname)순으로 정렬
+		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fname");
 		
-		return foodRepo.findAllFoodsByfNameContaining(FName, paging);
+		return foodRepo.findAllFoodsByfnameContaining(FName, paging);
 	}
 
 	@Override
 	public List<Food> getFoodListByCategory(String category) {
 		
-		return foodRepo.findAllFoodByfCategoryContaining(category);
+		return foodRepo.findAllFoodsByfcategoryContaining(category);
 	}
 
 	@Override
@@ -50,16 +48,25 @@ public class FoodServiceImpl implements FoodService{
 	}
 
 	@Override
-	public FoodDetail getFoodDetail(int fUid) {
+	public Page<Food> getFoodListBySearch(String category, String SearchWord, int page, int size) {
+		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fname");
 		
-		return foodRepo.findFoodDetailByfUid(fUid);
+		return foodRepo.findByFnameContainingAndFcategoryContaining(category, SearchWord, paging);
 	}
 
 	@Override
-	public FoodRecipe getFoodRecipe(String frName) {
-
-		return foodRecipeRepo.findFoodRecipeByrfNameContaining(frName);
+	public List<Object[]> getFoodAndDetail(int fuid) {
+		
+		return foodRepo.findFoodAndFoodDetail(fuid);
 	}
 
-	
+
 }
+
+
+
+
+
+
+
+

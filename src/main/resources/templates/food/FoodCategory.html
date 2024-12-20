@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -12,8 +12,8 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="${pageContext.request.contextPath}/resources/static/css/FoodCategoryStyles.css" rel="stylesheet" type="text/css" />
-        <link href="css/FoodCategoryStyles.css" rel="stylesheet" type="text/css"/> 
+        <link th:href="@{/css/FoodCategoryStyles.css}" rel="stylesheet" /> 
+        <script type="text/javascript" th:src="@{/js/FoodCategory.js}"></script>
         
     </head>
     <body class="d-flex flex-column h-100">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img src="${imgsrc}" alt="..." /></div>
+                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img th:src="${imgsrc}" alt="..." /></div>
                     </div>
                 </div>
             </header>
@@ -102,11 +102,11 @@
 	                        <div class="col-lg-4 mb-5">
 	                            <div class="card h-100 shadow border-0">
 	                            
-	                                <img class="card-img-top" src="@{/image/food_images/} + ${foodexample.fImg}" alt="..." />
+	                                <img class="card-img-top" th:src="@{/image/food_images/} + ${foodexample.fimg}" alt="..." />
 	                                
 	                                <div class="card-body p-4">
-	                                    <a class="text-decoration-none link-dark stretched-link" th:href="@{fooddetail(fUid=${foodexample.fUid})}"><h5 class="card-title mb-3" text="${foodexample.fName}"></h5></a>
-	                                    <p class="card-text mb-0">음식 설명</p>
+	                                    <a class="text-decoration-none link-dark stretched-link" th:href="@{fooddetail(fuid=${foodexample.fuid})}"><h5 class="card-title mb-3" th:text="${foodexample.fname}"></h5></a>
+	                                    <p class="card-text mb-0" th:text="${category} + '예시 ' + ${foodexampleStat.count} + '번'" >음식 설명</p>
 	                                </div>        
 	                            </div>
 	                        </div>
@@ -140,7 +140,6 @@
         <th:block th:insert="~{/include/footer}"></th:block>  
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script  src= "js/FoodCategoryScripts.js" /></script>
+ 
     </body>
 </html>
