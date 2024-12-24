@@ -24,18 +24,21 @@
                     <h1 class="display-4 fw-bolder">음식 정보 모음</h1>
                     <p class="lead fw-normal text-white-50 mb-0">각종 음식 정보를 확인하세요</p>
                     <form method="get">  
-
-						<select name="category" align="center">
+	
+						<select name="category" id="category" align="center">
 							<option value="">카테고리 선택</option>
 							<option value="저지방">저지방</option>
-							<option value="저염식">저염식</option>
-							<option value="저칼로리">저칼로리</option>
-							<option value="저당식품">저당음식</option>
+					        <option value="저염식">저염식</option>
+					        <option value="저칼로리">저칼로리</option>
+					        <option value="저당식품">저당음식</option>
 						</select>
 							            
-						<input type="text" name="searchword" placeholder="이름으로 검색" />
+						<input type="text" name="searchword" id="searchword" placeholder="이름으로 검색" />
+						<!-- 
+						<input type="hidden" name="category" th:value="${category}" />
+    					<input type="hidden" name="searchword" th:value="${searchword}" />
+						 -->
 						<input type="submit" value="검색하기" />
-						    
 				    </form>
                 </div>
             </div>
@@ -87,6 +90,7 @@
         <th:block th:insert="~{/include/footer}"></th:block>  
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
     </body>
 </html>

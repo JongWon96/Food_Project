@@ -25,7 +25,7 @@ public interface FoodRepository extends JpaRepository<Food, Integer>{
 //			 + " WHERE f.category LIKE %?1% "
 //			 + " AND f.fName LIKE %?2% "
 //			 + " ORDER BY fName DESC")
-	public Page<Food> findByFnameContainingAndFcategoryContaining(String category, String fName, Pageable pageable);
+	public Page<Food> findByFcategoryContainingAndFnameContaining(String category, String fname, Pageable pageable);
 	
 
 }

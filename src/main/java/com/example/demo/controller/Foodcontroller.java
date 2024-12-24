@@ -49,7 +49,7 @@ public class Foodcontroller {
 			System.out.println("검색어로 검색" + foodlist);
 		} else if (!category.isEmpty() && !searchword.isEmpty()){
 			foodlist = foodService.getFoodListBySearch(category, searchword, page, size);
-			System.out.println("카테고리와 검색어로 검색");
+			System.out.println("카테고리와 검색어로 검색" + foodlist);
 		}
 		
 		model.addAttribute("foodList", foodlist.getContent());

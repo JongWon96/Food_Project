@@ -50,8 +50,8 @@ public class FoodServiceImpl implements FoodService{
 	@Override
 	public Page<Food> getFoodListBySearch(String category, String SearchWord, int page, int size) {
 		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fname");
-		
-		return foodRepo.findByFnameContainingAndFcategoryContaining(category, SearchWord, paging);
+		System.out.println("서비스 영역" + foodRepo.findByFcategoryContainingAndFnameContaining(category, SearchWord, paging).getContent());
+		return foodRepo.findByFcategoryContainingAndFnameContaining(category, SearchWord, paging);
 	}
 
 
