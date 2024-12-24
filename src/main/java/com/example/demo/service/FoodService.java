@@ -20,5 +20,4 @@ public interface FoodService {
 
 	public Page<Food> getFoodListBySearch(String category, String SearchWord, int page, int size);
 
-	public List<Object[]> getFoodAndDetail(int fuid);
 }

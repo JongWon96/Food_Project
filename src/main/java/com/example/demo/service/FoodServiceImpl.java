@@ -24,7 +24,7 @@ public class FoodServiceImpl implements FoodService{
 	public Page<Food> getAllFoodListByCategory(String category, int page, int size){
 		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fcategory");
 		
-		return foodRepo.findAllFoodsByfcategoryContaining(category, paging);
+		return foodRepo.findAllFoodByfcategoryContaining(category, paging);
 	}
 
 	@Override
@@ -52,12 +52,6 @@ public class FoodServiceImpl implements FoodService{
 		Pageable paging = PageRequest.of(page-1, size, Direction.ASC, "fname");
 		
 		return foodRepo.findByFnameContainingAndFcategoryContaining(category, SearchWord, paging);
-	}
-
-	@Override
-	public List<Object[]> getFoodAndDetail(int fuid) {
-		
-		return foodRepo.findFoodAndFoodDetail(fuid);
 	}
 
 

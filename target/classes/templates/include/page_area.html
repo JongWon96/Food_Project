@@ -8,14 +8,14 @@
 	<ul class="pagination" th:with="start=${T(java.lang.Math).floor(pageInfo.number/10)*10 + 1},
 				last=(${start + 9 < pageInfo.totalPages ? start+9 : pageInfo.totalPages})"><!-- T: java의 thymeleaf 함수 -->
   		<th:block th:with="
-  			firstPage=@{/admin_product_list(page=1)},
-  			previous=@{/admin_product_list(page=${pageInfo.number})},
-  			next=@{/admin_product_list(page=${pageInfo.number + 2})},
-  			lastPage=@{/admin_product_list(page=${pageInfo.totalPages})}">														   	
+  			firstPage=@{/foodproject/foodlist(category = ${category}, searchword = ${searchword}, page=1)},
+  			previous=@{/foodproject/foodlist(category = ${category}, searchword = ${searchword}, page=${pageInfo.number})},
+  			next=@{/foodproject/foodlist(category = ${category}, searchword = ${searchword}, page=${pageInfo.number + 2})},
+  			lastPage=@{/foodproject/foodlist(category = ${category}, searchword = ${searchword}, page=${pageInfo.totalPages})}">														   	
 
 			<li th:class="paging">
 				<a th:href="${firstPage}" aria-label="First">
-					<span aria-hidden="true">First</span>
+					<span aria-hidden="true">처음으로</span>
 				</a>
 			</li>
 			<!--  이전 페이지로 가기 버튼  -->
@@ -28,7 +28,7 @@
 			<!-- [1][2][3]... 표시 부분 -->
 			<!-- number.sequence() - 원하는 범위의 연속된 일련번호를 생성 -->
 			<li th:each="page : ${#numbers.sequence(start, last)}" th:class="${page == pageInfo.number + 1} ? 'active'" class="paging">
-				<a th:text="${page}" th:href="@{/admin_product_list(page=${page})}"></a> 
+				<a th:text="${page}" th:href="@{/foodproject/foodlist(category = ${category},  searchword = ${searchword}, page=${page})}"></a> 
 			</li>
 		
 			<!--  다음 페이지로 -->
@@ -41,7 +41,7 @@
 			<!-- 맨 마지막 페이지로 이동 -->
 			<li>
 				<a th:href="${lastPage}" aria-label="Last">
-					<span aria-hidden="true">Last</span>
+					<span aria-hidden="true">마지막으로</span>
 				</a>
 			</li>
 		</th:block>

@@ -1,5 +1,6 @@
 package com.example.demo.domain;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -29,22 +30,21 @@ public class FoodDetail {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int fdUid;
 	
-	@Column(nullable=true)
-	private float fdKcal;
+	private float fdKcal;  //칼로리
 	
-	@Column(nullable=true)
+	@ColumnDefault("0")
 	private float fdCarb; //탄수화물
 	
-	@Column(nullable=true)
+	@ColumnDefault("0")
 	private float fdPrt; //단백질
 	
-	@Column(nullable=true)
+	@ColumnDefault("0")
 	private float fdFat; //지방
 	
-	@Column(nullable=true)
+	@ColumnDefault("0")
 	private float fdSugar; //당류
 	
-	@Column(nullable=true)
+	@ColumnDefault("0")
 	private float fdNa; //나트륨
 	
 	

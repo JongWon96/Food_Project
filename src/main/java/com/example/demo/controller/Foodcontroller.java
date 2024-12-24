@@ -42,11 +42,14 @@ public class Foodcontroller {
 		Page<Food> foodlist = foodService.getAllFoodList(searchword, page, size);
 		
 		if (!category.isEmpty() && searchword.isEmpty()) {
-			foodlist = foodService.getAllFoodListByCategory(searchword, page, size);
+			foodlist = foodService.getAllFoodListByCategory(category, page, size);
+			System.out.println("카테고리로 검색" + foodlist);
 		} else if (category.isEmpty() && !searchword.isEmpty()) {
 			foodlist = foodService.getAllFoodList(searchword, page, size);
+			System.out.println("검색어로 검색" + foodlist);
 		} else if (!category.isEmpty() && !searchword.isEmpty()){
 			foodlist = foodService.getFoodListBySearch(category, searchword, page, size);
+			System.out.println("카테고리와 검색어로 검색");
 		}
 		
 		model.addAttribute("foodList", foodlist.getContent());
@@ -102,7 +105,7 @@ public class Foodcontroller {
 			comment2 = "높은 수준의 포화지방과 트랜스지방은 심장병 위험 증가와 관련이 있습니다. 저지방 식단은 이러한 유해한 지방 섭취를 줄이고 심장병 위험을 낮출 수 있습니다.";
 			comment3 = "지방이 많은 음식은 소화계에 부담을 주어 산성 역류, 팽창, 변비와 같은 문제를 일으킬 수 있습니다. 섬유질이 풍부한 저지방 식단을 섭취하면 소화를 개선시킬 수 있습니다.";
 			comment4 = "연구에 따르면 저지방 식단은 유방암이나 대장암 등 특정 유형의 암 위험을 낮추는 것과 관련이 있습니다.";
-			imgsrc = "image/FoodCategory/저지방.jpg";
+			imgsrc = "/image/FoodCategory/저지방.jpg";
 			break;
 		case "저염식" :
 			introduce = "저염식 식단에 대한 소개";
@@ -114,7 +117,7 @@ public class Foodcontroller {
 			comment2 = "염분이 체내에 과잉 축적되면 수분 대사를 방해하고 혈압이 높아지면서 고혈압을 비롯해 각종 성인병을 유발할 수 있습니다.";
 			comment3 = "섭취한 염분은 혈액에서 칼슘과 결합해 소변으로 나가는데, 이로 인에 칼슘 흡수량이 적어지고 골다공증을 유발할 수 있습니다. ";
 			comment4 = "과도한 염분은 체내 농도를 높여 몸속 수분량을 늘리기 때문에 이로 인해 혈압이 높아져 다양한 질병을 유발할 수 있습니다.";
-			imgsrc = "image/FoodCategory/저염식.png";
+			imgsrc = "/image/FoodCategory/저염식.png";
 			break;
 		case "저칼로리" :
 			introduce = "저칼로리 식단에 대한 소개";
@@ -126,7 +129,7 @@ public class Foodcontroller {
 			comment2 = "칼로리가 낮고 지방이 적은 식단을 섭취하면 인슐린 민감도와 혈당 조절이 개선되는 데 도움이 될 수 있습니다. 이는 당뇨병이 있거나 당뇨병에 걸릴 위험이 있는 사람들에게 중요합니다.";
 			comment3 = "저칼로리 식단은 곧 저지방 식단과 많은 부분 일치하기 때문에 지방을 적게 먹는데 도움이 되어 여러 만성 질환과 관련이 있는 신체의 염증을 줄이는 데 도움이 될 수 있습니다.";
 			comment4 = "저칼로리 식단을 하게 되면 저탄수화물, 저당 식단을 하게 되기 때문에 저당식단의 가장 큰 장점인 노화 관리를 같이 할 수 있습니다.";
-			imgsrc = "image/FoodCategory/저칼로리.jpg";
+			imgsrc = "/image/FoodCategory/저칼로리.jpg";
 			break;
 		case "저당식품" :
 			introduce = "저당식품 식단에 대한 소개";
@@ -138,7 +141,7 @@ public class Foodcontroller {
 			comment2 = "저당식품은 혈당을 서서히 올려주기 때문에 에너지 유지와 함께 혈당 변화를 최소화하는 데 도움이 되며, 꾸준히 섭취함으로써 당뇨 예방 효과도 기대할 수 있습니다.";
 			comment3 = "높은 당분 섭취는 입안의 박테리아 활동을 활발하게 하여 충치를 일으킬 가능성이 큰데요, 저당식품을 섭취하면 이런 걱정을 줄일 수 있습니다. 이로 인해 아이들의 간식으로도 좋은 음식입니다.";
 			comment4 = "저당 식품을 먹어 혈당 관리를 하게 되면 자연스럽게 인슐린 분배가 조절되는데 이 인슐린 분배량이 적어지면 세포의 손상과 쌓이는 불량 단백질의 양이 적어지면서 노화 속도가 줄어들게 됩니다.";
-			imgsrc = "image/FoodCategory/저당식품.webp";
+			imgsrc = "/image/FoodCategory/저당식품.webp";
 			break;
 		}
 		List<String> features = new ArrayList<String>();
@@ -173,7 +176,7 @@ public class Foodcontroller {
 			model.addAttribute("errorMessage", "FoodDetail not found.");
 			return "errorPage"; // 에러 페이지로 이동
 		}
-//		
+		
 		String fdcategory = fdInfo.getFood().getFcategory();
 		
 		String[] category = new String[4];
@@ -193,6 +196,9 @@ public class Foodcontroller {
 		model.addAttribute("fname", fdInfo.getFood().getFname());
 		model.addAttribute("fImg", fdInfo.getFood().getFimg());
 		model.addAttribute("frUid", fdInfo.getFood().getFoodRecipe().getFrUid());
+	
+		String recipelink = fdInfo.getFood().getFoodRecipe().getRfName();
+		model.addAttribute("recipelink", recipelink);
 		
 		return "food/FoodDetail";
 	}
@@ -203,9 +209,29 @@ public class Foodcontroller {
 		
 		FoodRecipe foodrecipe= foodRecipeService.getFoodRecipeById(frUid);
 		
+		String[] foodIngre = foodrecipe.getFIngre().split(",");
+		String[] foodRecipeText = foodrecipe.getFReicpe().split(",");
+		
 		model.addAttribute("foodRecipe", foodrecipe);
+		model.addAttribute("foodIngre", foodIngre);
+		model.addAttribute("foodRecipeText", foodRecipeText);
 		
 		return "food/FoodRecipe";
 	}
 	
+	// 이름으로 검색한 레시피 리스트
+	@GetMapping("/foodrecipelist")
+	private String foodListViewByName(Food food, 	
+			@RequestParam(value="searchword", defaultValue="") String rfName,
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="size", defaultValue="10") int size,
+			Model model) {
+		//Page<Food> foodlist = new PageImpl<>(new ArrayList<>()); // -> 빈 리스트로 초기화 (기본값)
+		Page<FoodRecipe> foodRecipelist = foodRecipeService.getAllFoodRecipeList(rfName, page, size);
+
+		
+		model.addAttribute("foodRecipeList", foodRecipelist.getContent());
+		model.addAttribute("pageInfo", foodRecipelist);
+		return "food/FoodRecipeList";
+	}
 }
