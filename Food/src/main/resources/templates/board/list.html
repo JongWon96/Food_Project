@@ -1,0 +1,178 @@
+	<!DOCTYPE html>
+	<html lang="ko">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>게시글 목록</title>
+	    <link rel="stylesheet" href="/css/list.css">
+	</head>
+	<body>
+	    <header>
+	        <h1>커뮤니티 게시판</h1> 
+	    <a href="/main">홈 /</a>
+	    <a href="/mypage">마이페이지 /</a> 
+	    <a th:if="${loginUser != null}" href="/Food_diary">나의 다이어리 /</a> 
+	    <a href="/Food">요리 /</a> 
+	    <a href="/Recomand">오늘의 추천 /</a> 
+	    <a href="/boards">게시판 /</a>
+	    <a th:if="${loginUser == null}" href="/login">로그인 </a>
+			<!-- 일반 사용자 로그아웃 -->
+			<form id="logoutForm" th:action="@{/board/logout}" method="post" style="display:inline;">
+				<button type="submit" th:if="${loginUser != null}">
+					로그아웃 (<span th:text="${loginUser}"></span>)
+				</button>
+			</form>
+
+			<!-- 관리자 로그아웃 -->
+			<form id="adminLogoutForm" th:action="@{/admin/logout}" method="post" style="display:inline;">
+				<button type="submit" th:if="${admininfoUser != null}">
+					로그아웃 (<span th:text="${admininfoUser}"></span>)
+				</button>
+			</form>
+	    </header>
+	    
+	    <form id="logout-form" action="board/logout" method="post" style="display: none;"></form>
+	
+	<!-- 어드민 작성 게시글 목록 -->
+	<br>
+<center><h2 >공 지 사 항</h2></center>
+
+<table>
+    <thead>
+      
+    </thead>
+    <tbody>
+        <!-- 어드민이 작성한 게시글 목록  테스트 아직 못해봄  -->
+        <th:block th:if="${adminBoards != null}">
+            <th:block th:each="board : ${adminBoards}">
+                <tr>
+                    <td th:text="${board.buid}"></td>
+                    <td>
+                        <a th:href="@{/board_detail/{buid}(buid=${board.buid})}" th:text="${board.btitle}"></a>
+                    </td>
+                    <td th:text="${board.author != null ? board.author.uname : '알 수 없음'}"></td>
+                    <td th:text="${#dates.format(board.bcreateAt, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${board.bcnt != null ? board.bcnt : 0}"></td>
+                </tr>
+            </th:block>
+        </th:block>
+        <th:block th:if="${adminBoards == null or #lists.isEmpty(adminBoards)}">
+            <tr>
+                <td colspan="5" style="text-align: center;">작성한 게시글이 없습니다.</td>
+            </tr>
+        </th:block>
+    </tbody>
+</table>
+	
+	
+
+	 <!-- 조회수가 가장 높은 게시글 표시 -->
+		<div th:if="${mostLikedBoard != null}" class="most-liked">
+			<h3>좋아요가 가장 많은 게시글</h3>
+			<table>
+				<thead>
+				<tr>
+					<th>작성번호</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+					<th>좋아요 수</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td th:text="${mostLikedBoard.buid}"></td>
+					<td>
+						<a th:href="@{/board_detail/{buid}(buid=${mostLikedBoard.buid})}" th:text="${mostLikedBoard.btitle}"></a>
+					</td>
+					<td th:text="${mostLikedBoard.author != null ? mostLikedBoard.author.uname : '알 수 없음'}"></td>
+					<td th:text="${#dates.format(mostLikedBoard.bcreateAt, 'yyyy-MM-dd')}"></td>
+					<td th:text="${mostLikedBoard.blikecnt}"></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	    
+	    
+	    <!-- 검색창 추가 -->
+	    <div>
+	        <form action="/boards" method="get">
+	            <label for="searchKeyword">검색어:</label>
+	            <input type="text" id="searchKeyword" name="searchKeyword" placeholder="검색어를 입력하세요"/>
+	            
+	            <!-- 검색 조건 선택 (제목, 작성자, 제목+작성자) -->
+	            <select name="searchCondition" id="searchCondition">
+	        <option value="titleauthor" th:selected="${searchCondition == 'titleauthor'}">제목 + 작성자</option>
+	        <option value="title" th:selected="${searchCondition == 'title'}">제목</option>
+	        <option value="author" th:selected="${searchCondition == 'author'}">작성자</option>
+	    </select>
+	         
+	            <button type="submit">검색</button>
+	        </form>
+	    </div>
+	
+	    <!-- 게시글 리스트 -->
+	    <table>
+	        <thead>
+	            <tr>
+	                <th>작성번호</th>
+	                <th>제목</th>
+	                <th>작성자</th>
+	                <th>작성일</th>
+					<th>좋아요</th>
+	                <th>조회수</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <!-- 게시글이 없을 때 -->
+	            <th:block th:if="${boardPage.content != null and #lists.isEmpty(boardPage.content)}">
+	                <tr>
+	                    <td colspan="5" style="text-align: center;">게시글이 없습니다.</td>
+	                </tr>
+	            </th:block>
+	
+	
+	            <!-- 게시글 리스트 -->
+	            <th:block th:each="board : ${boardPage.content}">
+	                <tr>
+	                    <td th:text="${board.buid}"></td>
+	                    <td>
+
+	    <a th:href="@{/board_detail/{buid}(buid=${board.buid})}" th:text="${board.btitle}">
+	        <!-- 이미지가 있으면 이미지 표시, 없으면 제목만 표시 -->
+	        <span th:if="${board.bimg = 'default.jpg'}">
+	            <<img th:src="@{/css/img/imgCheck.png}" alt="Check Image" style="width: 30px; height: 30px; margin-right: 10px;">
+	        </span>
+	        <!-- 이미지가 없으면 그냥 제목만 표시 -->
+	    </a>
+	</td>
+	
+	
+	                    
+	                    <td th:text="${board.author != null ? board.author.uname : '알 수 없음'}"></td>
+	                       <td th:text="${board.bcreateAt != null ? (T(java.time.LocalDateTime).ofEpochSecond(board.bcreateAt.getTime() / 1000, 0, T(java.time.ZoneOffset).UTC).isAfter(T(java.time.LocalDateTime).now().minusDays(1)) ? 
+							        #dates.format(board.bcreateAt, 'HH:mm') : 
+							        #dates.format(board.bcreateAt, 'yyyy-MM-dd')) : '오류'}"></td>
+						<td th:text="${board.blikecnt != null ? board.blikecnt  : 0}"></td>
+	                    <td th:text="${board.bcnt != null ? board.bcnt : 0}"></td>
+	                </tr>
+	            </th:block>
+	        </tbody>
+	    </table>
+	
+	    <!-- 페이지네이션 -->
+	    <div>
+	        <th:block th:if="${boardPage.totalPages > 1}">
+	            <span th:each="i : ${#numbers.sequence(0, boardPage.totalPages - 1)}">
+	                <a th:href="@{/boards?page={page}(page=${i})}" th:text="${i + 1}"></a>
+	            </span>
+	        </th:block>
+	    </div>
+	
+	
+	<button onclick="location.href='/board_insert_form'">게시글 작성</button>
+	      
+	<button th:if="${admininfoUser!= null}" onclick="location.href='/admin/boards'">신고된 게시글 목록으로 이동</button>
+	      
+	</body>
+	</html>

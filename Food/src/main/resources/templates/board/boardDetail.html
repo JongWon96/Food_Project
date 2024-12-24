@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 상세</title>
+    <link rel="stylesheet" href="/css/boardDetail.css">
+    <script th:inline="javascript">
+        // 댓글 작성 버튼 클릭 시 textarea 토글
+       function toggleCommentForm() {
+    var commentForm = document.getElementById("commentForm");
+    var submitButton = document.getElementById("submitButton");
+    var commentText = document.getElementsByName("ccontent")[0];
+
+    if (commentForm.style.display === "none" || commentForm.style.display === "") {
+        // 폼 표시
+        commentForm.style.display = "block";
+        submitButton.innerText = "댓글 작성 완료"; // 버튼 텍스트 변경
+    } else {
+        // 폼이 이미 표시된 상태에서 내용이 비어 있는 경우 폼 숨기기
+        if (commentText.value.trim() === "") {
+            commentForm.style.display = "none";
+            submitButton.innerText = "댓글 작성"; // 버튼 텍스트 초기화
+        } else {
+            // 내용이 있으면 폼을 제출
+            commentForm.submit();
+        }
+    }
+}
+
+     // 댓글 수정 폼을 토글하는 함수
+        function toggleCommentEditForm(cuid) {
+           console.log('cuid', cuid);
+        var commentEditForm = document.getElementById("commentEditForm-" + cuid);
+        console.log('commentEditForm', commentEditForm);
+            // 해당 댓글의 수정 폼이 숨겨져 있으면 보이도록 하고, 보이면 숨기도록 설정
+            if (commentEditForm.style.display === "none" || commentEditForm.style.display === "") {
+                commentEditForm.style.display = "block";  // 폼 보이기
+            } else {
+                commentEditForm.style.display = "none";  // 폼 숨기기
+            }
+        }
+
+
+
+        // 신고 버튼 클릭 시 모달 창 열기
+        function openReportModal() {
+            document.getElementById("reportModal").style.display = "block";
+        }
+
+        // 모달 창 닫기
+        function closeReportModal() {
+            document.getElementById("reportModal").style.display = "none";
+        }
+
+        // 신고 이유 제출 (이제 이유 없이 신고)
+        function submitReport() {
+            var form = document.getElementById("reportForm");
+            form.submit();  // 폼을 서버로 전송하여 신고 처리
+        }
+
+        // 좋아요 버튼 클릭 시 메시지를 모달로 표시
+        const likeButton = document.getElementById("likeButton");
+        const likeMessage = document.getElementById("likeMessage");
+
+        if (likeButton.disabled) {
+            openLikeErrorModal("이미 이 게시글에 좋아요를 눌렀거나 로그인하지 않았습니다.");
+        }
+
+        function openLikeErrorModal(message) {
+            const modal = document.getElementById("likeErrorModal");
+            const errorMessage = document.getElementById("likeErrorMessage");
+            errorMessage.innerText = message;
+            modal.style.display = "block"; // 모달 열기
+        }
+
+        // 모달을 닫는 함수
+        function closeLikeErrorModal() {
+            const modal = document.getElementById("likeErrorModal");
+            modal.style.display = "none"; // 모달 닫기
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>커뮤니티 게시판</h1>
+    <a href="/main">홈 /</a>
+    <a href="/mypage">마이페이지 /</a>
+    <a th:if="${loginUser != null}" href="/Food_diary">나의 다이어리 /</a>
+    <a href="/Food">요리 /</a>
+    <a href="/Recomand">오늘의 추천 /</a>
+    <a href="/boards">게시판 /</a>
+    <a th:if="${loginUser == null}" href="/login">로그인 </a>
+    <!-- 일반 사용자 로그아웃 -->
+    <form id="logoutForm" th:action="@{/board/logout}" method="post" style="display:inline;">
+        <button type="submit" th:if="${loginUser != null}">
+            로그아웃 (<span th:text="${loginUser}"></span>)
+        </button>
+    </form>
+
+    <!-- 관리자 로그아웃 -->
+    <form id="adminLogoutForm" th:action="@{/admin/logout}" method="post" style="display:inline;">
+        <button type="submit" th:if="${admininfoUser != null}">
+            로그아웃 (<span th:text="${admininfoUser}"></span>)
+        </button>
+    </form>
+</header>
+
+<h1 th:text="${board.btitle}"></h1>
+<p>작성자: <span th:text="${board.author.uname}"></span></p>
+
+<!-- 게시글 내용 -->
+<div class="board-bcontent">
+    <p th:text="${board.bcontent}"></p>
+    <img th:if="${board.bimg != null}" th:src="@{${imagePath}}" alt="이미지 에러" style="width: 100%; max-width: 600px; height: auto;">
+</div>
+
+<p>작성일: <span th:text="${#dates.format(board.bcreateAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+
+
+<!-- 게시글 신고 버튼 -->
+<button onclick="openReportModal()">게시글 신고</button>
+
+<!-- 신고 모달 창 -->
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeReportModal()">&times;</span>
+        <h3>게시글을 신고하시겠습니까?</h3>
+        <button onclick="submitReport()">신고 완료</button>
+    </div>
+</div>
+
+
+<!-- 좋아요 버튼 섹션 -->
+<div class="like-section">
+    <!-- 좋아요 수 표시 -->
+
+    <form    th:action="@{/board_like/{buid}(buid=${board.buid})}" method="POST" id="likeForm">
+        <button type="submit" id="likeButton"
+                ${session.getAttribute('likedBoard' + board.buid) != null ? 'disabled' : ''}>
+        <span>👍</span> 좋아요 <span th:text=${board.blikecnt}></span>
+        </button>
+    </form>
+
+    <!-- 좋아요 에러 메시지를 모달로 표시 -->
+    <div id="likeErrorModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeLikeErrorModal()">&times;</span>
+            <p id="likeErrorMessage"></p>
+        </div>
+    </div>
+
+    <!-- 로그인 상태가 아니거나 이미 좋아요를 눌렀다면 메시지 표시 -->
+    <div id="likeMessage" style="color: red; font-weight: bold;"></div>
+</div>
+
+
+</div>
+
+
+
+
+<!-- 댓글 리스트 -->
+<h3>댓글</h3>
+<ul>
+    <th:block th:each="comment : ${comments}">
+        <li>
+            <span th:text="${comment.cuid}"></span>
+            <span th:text="${comment.author.uname}"></span>:
+            <span th:text="${comment.ccontent}"></span>
+
+            <!-- 댓글 수정 버튼 -->
+            <button type="button" th:onclick="'toggleCommentEditForm(' + ${comment.cuid} + ')'" >댓글 수정</button>
+
+            <!-- 댓글 수정 폼 -->
+            <form th:id="'commentEditForm-' + ${comment.cuid}"
+                  th:action="@{/comment_edit/{cuid}(cuid=${comment.cuid})}"
+                  method="post" style="display:none;">
+                <input type="hidden" name="cuid" th:value="${comment.cuid}" />
+                <textarea name="ccontent" placeholder="댓글 내용을 수정하세요" th:text="${comment.ccontent}"></textarea>
+                <button type="submit">댓글 수정 완료</button>
+            </form>
+
+
+
+
+            <!-- 댓글 삭제 버튼 -->
+            <form th:action="@{/comment_delete/{cuid}(cuid=${comment.cuid})}" method="post" style="display:inline;">
+                <button type="submit">댓글 삭제</button>
+            </form>
+        </li>
+    </th:block>
+</ul>
+
+<!-- 댓글 작성 버튼 -->
+<button onclick="toggleCommentForm()">댓글 작성</button>
+
+<!-- 댓글 작성 폼 (초기에는 숨김) -->
+<form id="commentForm" th:action="@{/comment/write}" method="post" style="display:none;">
+    <input type="hidden" name="buid" th:value="${board.buid}">
+    <textarea name="ccontent" placeholder="댓글을 작성하세요"></textarea>
+    <button type="submit" id="submitButton">댓글 작성</button>
+</form>
+
+<br>
+<form action="/boards" method="get">
+    <button type="submit" class="btn">목록으로</button>
+</form>
+
+<!-- 게시글 수정 폼 -->
+<form th:action="@{/board_edit_form/{buid}(buid=${board.buid})}" method="get">
+    <button type="submit" class="btn">게시글 수정</button>
+</form>
+
+<!-- 게시글 삭제 폼 -->
+<form th:action="@{/board_delete/{buid}(buid=${board.buid})}" method="get">
+    <button type="submit" class="btn">게시글 삭제</button>
+</form>
+
+<!-- 신고 폼 -->
+<form id="reportForm" th:action="@{/board_danger/{buid}(buid=${board.buid})}" method="post" style="display:none;">
+</form>
+
+</body>
+</html>

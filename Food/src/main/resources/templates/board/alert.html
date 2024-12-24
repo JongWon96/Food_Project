@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알림</title>
+</head>
+<body>
+    <div>
+        <p th:text="${msg}"></p> <!-- 모델에서 전달된 메시지를 출력 -->
+        <a th:href="@{${redirectTo}}"> 이전페이지 </a> <!-- 로그인 페이지로 리디렉션 -->
+    </div>
+</body>
+</html>

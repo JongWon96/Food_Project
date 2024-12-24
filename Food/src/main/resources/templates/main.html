@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="js/member.js"></script>
+
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 초록색 배경 스타일 적용 */
+        header {
+            background-color: #28a745; /* 초록색 배경 */
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a, nav ul li button {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li button:hover {
+            text-decoration: underline;
+        }
+
+        /* 카드 스타일 */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #28a745; /* 초록색 링크 */
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-top: 1px solid #ccc;
+        }
+
+
+    /* 팝업 콘텐츠 스타일 */
+    .popup-content {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        width: 300px; /* 팝업 너비 */
+        max-width: 90%; /* 작은 화면에서 너비 조정 */
+    }
+
+    .popup-content p {
+        margin: 0 0 20px;
+        font-size: 16px;
+        color: #333;
+    }
+
+    .popup-close-button {
+        background-color: #28a745; /* 초록색 버튼 */
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .popup-close-button:hover {
+        background-color: #218838; /* 진한 초록색 */
+    }
+
+        /* 팝업 위치 스타일 */
+    .popup {
+        position: fixed; /* 화면 고정 */
+        top: 50%; /* 화면의 수직 가운데 */
+        left: 50%; /* 화면의 수평 가운데 */
+        transform: translate(-50%, -50%); /* 가운데 정렬 보정 */
+        visibility: visible;
+        opacity: 1;
+        transition: opacity 0.3s ease; /* 부드러운 전환 효과 */
+    }
+
+    /* 팝업 숨기기: 체크박스가 체크 해제된 경우 */
+    .popup-checkbox:not(:checked) ~ .popup {
+        visibility: hidden;
+        opacity: 0;
+    }
+    </style>
+</head>
+<body>
+<header>
+    <h1>메인 페이지에 오신 것을 환영합니다</h1>
+    <nav>
+        <ul>
+            <!-- 사용자 로그인 상태에 따라 메뉴 표시 -->
+            <li th:if="${loginUser != null}"><a th:href="@{/mypage}">마이페이지</a></li>
+            <li th:if="${loginUser != null}"><a th:href="@{/diary}">다이어리</a></li>
+            <li><a th:href="@{/boards}">게시판</a></li> <!-- 게시판 메뉴 추가 -->
+            <li th:if="${loginUser != null}">
+                <form th:action="@{main/logout}" method="post" style="display: inline;">
+                    <button type="submit">로그아웃 (<span th:text="${loginUser.uname}"></span>)</button>
+                </form>
+            </li>
+            <li th:if="${loginUser == null}"><a th:href="@{/login}">로그인</a></li>
+            <li th:if="${loginUser == null}"><a th:href="@{/join_form}">회원가입</a></li>
+            <li><a th:href="@{/admin_login_form}">관리자 로그인</a></li>
+        </ul>
+        <tr align="center">
+
+        </tr>
+    </nav>
+</header>
+
+<main>
+    <input type="checkbox" id="popupToggle" class="popup-checkbox" checked style="display: none;">
+
+    <div id="successPopup" class="popup" th:if="${successMessage}">
+        <div class="popup-content">
+            <p th:text="${successMessage}"></p>
+            <label for="popupToggle" class="popup-close-button">확인</label>
+        </div>
+    </div>
+    <section>
+        <h2 style="text-align: center; margin: 20px 0;">식단 추천</h2>
+        <div class="card-container">
+            <div class="card">
+                <h3>식단 추천</h3>
+                <p>건강한 식단을 추천받아 보세요!</p>
+                <a th:href="@{/recommendation}">추천받기</a>
+            </div>
+        </div>
+
+        <h2 style="text-align: center; margin: 20px 0;">식단 및 레시피</h2>
+        <div class="card-container">
+            <div class="card">
+                <h3>식단 정보</h3>
+                <p>건강한 식단 정보를 확인하세요.</p>
+                <a th:href="@{/mealinfo}">자세히 보기</a>
+            </div>
+            <div class="card">
+                <h3>레시피 정보</h3>
+                <p>다양한 레시피 정보를 확인하세요.</p>
+                <a th:href="@{/recipes}">레시피 보기</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 MyWebsite. All rights reserved.</p>
+</footer>
+</body>
+</html>

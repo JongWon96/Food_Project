@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<th:block th:insert="~{/admininfo/header}"></th:block> 
+<script type="text/javascript">
+  function go_search()
+  {
+     document.frm.action="admininfo_userinfo_list";
+     document.frm.submit();
+  }
+</script>
+
+<article>
+<h1>회원리스트</h1>  
+<form name="frm" method="post">
+<table style="float:right; ">
+  <tr>
+  <td> 
+  회원 이름
+  <input type="text" name="key" id="key">
+  <input class="btn" type="button" value="검색" onclick="go_search()">
+  </td>
+  </tr>
+</table>  
+<br>
+<table id="orderList">
+  <tr>
+    <th> 아이디 </th>    <th> 이름 </th>
+    <th> 전화번호 </th>   <!-- <th> 가입일 </th> -->    
+  </tr>
+  <th:block th:each="userinfoVO : ${userinfoList}">
+  <tr>
+    <td> [[${userinfoVO.uid}]] </td>
+    <td> [[${userinfoVO.uname}]] </td>
+    <td> [[${userinfoVO.uphone}]] </td>   
+  </tr>
+  </th:block>
+</table>
+</form>
+</article>
+<th:block th:insert="~{/admininfo/footer}"></th:block>
+
+<button onclick="location.href='/admin/boards'">신고된 게시글 목록으로 이동</button>
+
+
+
+</body>
+</html>
